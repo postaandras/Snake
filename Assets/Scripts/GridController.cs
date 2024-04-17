@@ -6,11 +6,12 @@ using UnityEngine;
 public class GridController : MonoBehaviour
 {
 
-    [SerializeField] int gridSize;
-    [SerializeField] GameObject tilePrefab;
-    [SerializeField] int tileWidth;
+    [SerializeField] private int gridSize;
+    [SerializeField] private GameObject tilePrefab;
+    [SerializeField] private int tileWidth;
+    [SerializeField] private Camera sceneCamera;
 
-    [SerializeField] Camera sceneCamera;
+    public int GridSize { get { return gridSize; } }
 
     private Tile[,] board;
     private GameObject tilesParent;
@@ -58,7 +59,8 @@ public class GridController : MonoBehaviour
 
     private void Reset()
     {
-        Destroy(tilesParent);
+        if (tilesParent != null) Destroy(tilesParent);
+
     }
 
     private void InitializeSnake()
@@ -75,13 +77,6 @@ public class GridController : MonoBehaviour
         board[i, j].SetToSnake();
     }
 
-    public Tile[,] GetBoard()
-    {
-        return board;
-    }
 
-    public int GetGridSize()
-    {
-        return gridSize;
-    }
+    public Tile[,] GetBoard() { return board; }
 }

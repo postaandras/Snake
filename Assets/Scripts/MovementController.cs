@@ -128,7 +128,7 @@ public class MovementController : MonoBehaviour
 
     public bool IsValid(int x, int y, Tile[,] currentBoard)
     {
-        int gridSize = GridController.instance.GetGridSize();
+        int gridSize = GridController.instance.GridSize;
         return (x>=0 &&  y>=0 && x< gridSize && y<gridSize && !snaketiles.Contains(currentBoard[x,y]));
     }
 

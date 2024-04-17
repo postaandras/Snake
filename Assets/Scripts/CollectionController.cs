@@ -15,7 +15,7 @@ public class CollectionController : MonoBehaviour
     public void AppleSpawner(LinkedList<Tile> snakePositions)
     {
         Tile[,] currentBoard = GridController.instance.GetBoard();
-        int size = GridController.instance.GetGridSize();
+        int size = GridController.instance.GridSize;
 
         int randomX = Random.Range(0, size);
         int randomY = Random.Range(0, size);
