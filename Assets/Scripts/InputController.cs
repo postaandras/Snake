@@ -14,7 +14,7 @@ public class InputController : MonoBehaviour
     {
         Debug.Log("Medium difficulty chosen");
         MovementController.instance.SetSnakeSpeed("medium");
-        GridController.instance.StartGame();
+        GridController.instance.InitializeGame();
     }
 
 
@@ -22,14 +22,14 @@ public class InputController : MonoBehaviour
     {
         Debug.Log("Easy difficulty chosen");
         MovementController.instance.SetSnakeSpeed("easy");
-        GridController.instance.StartGame();
+        GridController.instance.InitializeGame();
     }
 
     public void OnHardButtonClick()
     {
         Debug.Log("Hard difficulty chosen");
         MovementController.instance.SetSnakeSpeed("hard");
-        GridController.instance.StartGame();
+        GridController.instance.InitializeGame();
     }
 
     // Update is called once per frame

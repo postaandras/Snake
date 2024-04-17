@@ -7,61 +7,62 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    [SerializeField] Sprite snakeSprite;
-    [SerializeField] Sprite appleSprite;
-    [SerializeField] Sprite fieldSprite;
+    [SerializeField] Color snakeColor;
+    [SerializeField] Color darkSnakeColor;
+    [SerializeField] Color appleColor;
+    [SerializeField] Color fieldColor;
+
 
     private int X;
     private int Y;
 
-    public void setX(int x)
+    public void SetX(int x)
     {
         X = x;
     }
 
-    public int getX()
+    public int GetX()
     {
         return X;
     }
 
-    public void setY(int y)
+    public void SetY(int y)
     {
         Y = y;
     }
 
-    public int getY()
+    public int GetY()
     {
         return Y;
     }
-    // Start is called before the first frame update
-    void Start()
+
+
+    private void Awake()
     {
-        
+        SetToField();
+    }
+    public void SetToSnake()
+    {
+        gameObject.GetComponent<SpriteRenderer>().color = snakeColor;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetToDarkSnake()
     {
-        
+        gameObject.GetComponent<SpriteRenderer>().color = darkSnakeColor;
     }
 
-    public void setToSnake()
+    public void SetToApple()
     {
-        gameObject.GetComponent<SpriteRenderer>().sprite = snakeSprite;
+        gameObject.GetComponent<SpriteRenderer>().color = appleColor;
     }
 
-    public void setToApple()
+    public void SetToField()
     {
-        gameObject.GetComponent<SpriteRenderer>().sprite = appleSprite;
-    }
-
-    public void setToField()
-    {
-        gameObject.GetComponent<SpriteRenderer>().sprite = fieldSprite;
+        gameObject.GetComponent<SpriteRenderer>().color = fieldColor;
     }
 
     public bool IsApple()
     {
-        return gameObject.GetComponent<SpriteRenderer>().sprite == appleSprite;
+        return gameObject.GetComponent<SpriteRenderer>().color == appleColor;
     }
 }

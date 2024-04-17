@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 
 public enum MoveDirection
@@ -19,9 +21,12 @@ public class MovementController : MonoBehaviour
 
 
     private float snakeSpeed = 0.1f;
+    private int stepCount;
 
     public static MovementController instance;
 
+
+    public static event EventHandler onGameOver;
     // Start is called before the first frame update
     void Start()
     {
@@ -57,7 +62,7 @@ public class MovementController : MonoBehaviour
             return;
         }
 
-        Vector2Int currentHead = new Vector2Int((int)snaketiles.First.Value.getX(), (int)snaketiles.First.Value.getY());
+        Vector2Int currentHead = new((int)snaketiles.First.Value.GetX(), (int)snaketiles.First.Value.GetY());
         Tile[,] currentBoard = GridController.instance.GetBoard();
 
         switch(direction)
@@ -80,34 +85,46 @@ public class MovementController : MonoBehaviour
 
     public void MoveSnake(int target_x, int target_y, Tile[,] currentBoard)
     {
-        if(IsValid(target_x, target_y, currentBoard))
+        if(!IsValid(target_x, target_y, currentBoard))
         {
-            snaketiles.AddFirst(currentBoard[target_x, target_y]);
-            
-            if (currentBoard[target_x, target_y].IsApple())
-            {
-                Debug.Log("I eats");
-                CollectionController.instance.AppleSpawner(snaketiles);
-            }
-            else
-            {
-                snaketiles.Last.Value.setToField();
-                snaketiles.RemoveLast();
-            }
-            currentBoard[target_x, target_y].setToSnake();
-
-            
+            GameOver();
+            return;        
         }
 
+        snaketiles.AddFirst(currentBoard[target_x, target_y]);
+        stepCount++;
+
+        if (currentBoard[target_x, target_y].IsApple())
+        {
+            Debug.Log("I eats");
+            CollectionController.instance.AppleSpawner(snaketiles);
+        }
         else
         {
-            snaketiles.Clear();
-            CanvasController.instance.ShowCanvas();
-            Debug.Log("Elbasztad");
-            return;
+            snaketiles.Last.Value.SetToField();
+            snaketiles.RemoveLast();
+        }
+
+        if (stepCount % 2 == 0)
+        {
+            currentBoard[target_x, target_y].SetToSnake();
+        }
+        else
+        {
+            currentBoard[target_x, target_y].SetToDarkSnake();
         }
         
+
     }
+
+    private void GameOver()
+    {
+        snaketiles.Clear();
+        stepCount = 0;
+        onGameOver?.Invoke(this, EventArgs.Empty);
+    }
+
+    
 
     public bool IsValid(int x, int y, Tile[,] currentBoard)
     {
@@ -117,6 +134,7 @@ public class MovementController : MonoBehaviour
 
     public void AddToSnake(Tile tile)
     {
+        
         snaketiles.AddFirst(tile);
     }
 
@@ -148,7 +166,8 @@ public class MovementController : MonoBehaviour
             case "easy":
                 snakeSpeed = 0.15f;
                 break;
-                //329 42
         }
     }
+
+ 
 }

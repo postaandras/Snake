@@ -2,28 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CanvasController : MonoBehaviour
+public class PanelController : MonoBehaviour
 {
 
-    public static CanvasController instance;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
+    public static PanelController instance;
     // Update is called once per frame
     void Update()
     {
         instance = this;
     }
 
-    public void HideCanvas()
+    public void HidePanel()
     {
         this.gameObject.SetActive(false);
     }
 
-     public void ShowCanvas()
+     public void ShowPanel()
     {
         this .gameObject.SetActive(true);
     }

@@ -13,17 +13,11 @@ public class GridController : MonoBehaviour
     [SerializeField] Camera sceneCamera;
 
     private Tile[,] board;
-    private List<GameObject> Tiles = new List<GameObject>();
+    private GameObject tilesParent;
 
     public static GridController instance;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    public void StartGame()
+    public void InitializeGame()
     {
         board = new Tile[gridSize, gridSize];
 
@@ -45,23 +39,18 @@ public class GridController : MonoBehaviour
     }
 
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void GenerateGrid()
     {
+        tilesParent = new GameObject("Tiles");
         for (int i = 0; i < gridSize; i++)
         {
             for (int j = 0; j < gridSize; j++)
             {
                 GameObject currentTile = Instantiate(tilePrefab, new Vector3(i, j, 0), Quaternion.identity);
-                Tiles.Add(currentTile);
+                currentTile.transform.SetParent(tilesParent.transform);
                 board[i, j] = currentTile.GetComponent<Tile>();
-                board[i, j].setX(i);
-                board[i, j].setY(j);
+                board[i, j].SetX(i);
+                board[i, j].SetY(j);
 
             }
         }
@@ -69,10 +58,7 @@ public class GridController : MonoBehaviour
 
     private void Reset()
     {
-        foreach(GameObject tile in Tiles)
-        {
-            Destroy(tile);
-        }
+        Destroy(tilesParent);
     }
 
     private void InitializeSnake()
@@ -86,7 +72,7 @@ public class GridController : MonoBehaviour
     private void AddToSnake(int i, int j)
     {
         MovementController.instance.AddToSnake(board[i, j]);
-        board[i, j].setToSnake();
+        board[i, j].SetToSnake();
     }
 
     public Tile[,] GetBoard()

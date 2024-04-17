@@ -7,32 +7,22 @@ public class CollectionController : MonoBehaviour
 
     public static CollectionController instance;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     private void Awake()
     {
         instance = this;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void AppleSpawner(LinkedList<Tile> snakePositions)
     {
         Tile[,] currentBoard = GridController.instance.GetBoard();
-        int randomX = Random.Range(0, GridController.instance.GetGridSize());
-        int randomY = Random.Range(0, GridController.instance.GetGridSize());
+        int size = GridController.instance.GetGridSize();
+
+        int randomX = Random.Range(0, size);
+        int randomY = Random.Range(0, size);
 
         if (!snakePositions.Contains(currentBoard[randomX, randomY]))
         {
-            currentBoard[randomX, randomY].setToApple();
+            currentBoard[randomX, randomY].SetToApple();
         }
         else
         {
