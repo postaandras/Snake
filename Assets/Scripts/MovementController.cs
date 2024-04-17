@@ -62,7 +62,7 @@ public class MovementController : MonoBehaviour
             return;
         }
 
-        Vector2Int currentHead = new((int)snaketiles.First.Value.GetX(), (int)snaketiles.First.Value.GetY());
+        Vector2Int currentHead = new((int)snaketiles.First.Value.X, (int)snaketiles.First.Value.Y);
         Tile[,] currentBoard = GridController.instance.GetBoard();
 
         switch(direction)

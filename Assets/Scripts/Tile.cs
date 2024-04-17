@@ -14,27 +14,17 @@ public class Tile : MonoBehaviour
 
     SpriteRenderer spriteRenderer;
 
-    private int X;
-    private int Y;
+    public int X { get; private set; }
+    public int Y { get; private set; }
 
     public void SetX(int x)
     {
         X = x;
     }
 
-    public int GetX()
-    {
-        return X;
-    }
-
     public void SetY(int y)
     {
         Y = y;
-    }
-
-    public int GetY()
-    {
-        return Y;
     }
 
 
