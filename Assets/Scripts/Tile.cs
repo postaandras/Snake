@@ -12,6 +12,7 @@ public class Tile : MonoBehaviour
     [SerializeField] Color appleColor;
     [SerializeField] Color fieldColor;
 
+    SpriteRenderer spriteRenderer;
 
     private int X;
     private int Y;
@@ -39,30 +40,31 @@ public class Tile : MonoBehaviour
 
     private void Awake()
     {
+        spriteRenderer = GetComponent<SpriteRenderer>();
         SetToField();
     }
     public void SetToSnake()
     {
-        gameObject.GetComponent<SpriteRenderer>().color = snakeColor;
+        spriteRenderer.color = snakeColor;
     }
 
     public void SetToDarkSnake()
     {
-        gameObject.GetComponent<SpriteRenderer>().color = darkSnakeColor;
+        spriteRenderer.color = darkSnakeColor;
     }
 
     public void SetToApple()
     {
-        gameObject.GetComponent<SpriteRenderer>().color = appleColor;
+        spriteRenderer.color = appleColor;
     }
 
     public void SetToField()
     {
-        gameObject.GetComponent<SpriteRenderer>().color = fieldColor;
+        spriteRenderer.color = fieldColor;
     }
 
     public bool IsApple()
     {
-        return gameObject.GetComponent<SpriteRenderer>().color == appleColor;
+        return spriteRenderer.color == appleColor;
     }
 }
