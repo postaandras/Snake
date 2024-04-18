@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static UnityEngine.GraphicsBuffer;
 
 
 public enum MoveDirection
@@ -27,11 +28,14 @@ public class MovementController : MonoBehaviour
 
 
     public static event EventHandler onGameOver;
-    public static event EventHandler<OnApplePicked> onApplePick;
-    public class OnApplePicked : EventArgs
+    public static event EventHandler<OnApplePick> onApplePick;
+
+
+    public class OnApplePick : EventArgs
     {
-        public float speed;
+        public float snakeSpeed;
     }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -70,25 +74,27 @@ public class MovementController : MonoBehaviour
         Vector2Int currentHead = new((int)snaketiles.First.Value.X, (int)snaketiles.First.Value.Y);
         Tile[,] currentBoard = GridController.instance.GetBoard();
 
+    
+
         switch(direction)
         {
             case MoveDirection.RIGHT:
-                MoveSnake(currentHead.x + 1, currentHead.y, currentBoard);
+                TryToMoveSnake(currentHead.x + 1, currentHead.y, currentBoard);
                 break;
             case MoveDirection.LEFT:
-                MoveSnake(currentHead.x - 1, currentHead.y, currentBoard);
+                TryToMoveSnake(currentHead.x - 1, currentHead.y, currentBoard);
                 break;
             case MoveDirection.UP:
-                MoveSnake(currentHead.x, currentHead.y+1, currentBoard);
+                TryToMoveSnake(currentHead.x, currentHead.y+1, currentBoard);
                 break;
             case MoveDirection.DOWN:
-                MoveSnake(currentHead.x, currentHead.y-1, currentBoard);
+                TryToMoveSnake(currentHead.x, currentHead.y-1, currentBoard);
                 break;
         }
     }
 
 
-    public void MoveSnake(int target_x, int target_y, Tile[,] currentBoard)
+    public void TryToMoveSnake(int target_x, int target_y, Tile[,] currentBoard)
     {
         if(!IsValid(target_x, target_y, currentBoard))
         {
@@ -96,13 +102,21 @@ public class MovementController : MonoBehaviour
             return;        
         }
 
-        snaketiles.AddFirst(currentBoard[target_x, target_y]);
+        Tile nextTile = currentBoard[target_x, target_y];
+        MoveSnake(nextTile);
+        
+
+    }
+
+    private void MoveSnake(Tile nextTile)
+    {
+        snaketiles.AddFirst(nextTile);
         stepCount++;
 
-        if (currentBoard[target_x, target_y].IsApple())
+        if (nextTile.IsApple())
         {
             Debug.Log("I eats");
-            onApplePick?.Invoke(this, new OnApplePicked { speed = this.snakeSpeed });
+            onApplePick?.Invoke(this, new OnApplePick { snakeSpeed = this.snakeSpeed });
             CollectionController.instance.AppleSpawner(snaketiles);
         }
         else
@@ -113,14 +127,12 @@ public class MovementController : MonoBehaviour
 
         if (stepCount % 2 == 0)
         {
-            currentBoard[target_x, target_y].SetToSnake();
+            nextTile.SetToSnake();
         }
         else
         {
-            currentBoard[target_x, target_y].SetToDarkSnake();
+            nextTile.SetToDarkSnake();
         }
-        
-
     }
 
     private void GameOver()

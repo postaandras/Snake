@@ -1,13 +1,45 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class InputController : MonoBehaviour
 {
+    private Dictionary<KeyCode, MoveDirection> keyMapping;
+
+    public static event EventHandler<OnMove> onMove;
+    public class OnMove : EventArgs
+    {
+        public MoveDirection MoveDirection;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        keyMapping = new Dictionary<KeyCode, MoveDirection>()
+        {
+            { KeyCode.W, MoveDirection.UP },
+            { KeyCode.S, MoveDirection.DOWN },
+            { KeyCode.D, MoveDirection.RIGHT },
+            { KeyCode.A, MoveDirection.LEFT }
+            // Add more key mappings as needed
+        };
+    }
+
+    void Update()
+    {
+        foreach (var kvp in keyMapping)
+        {
+            if (Input.GetKeyDown(kvp.Key))
+            {
+                if (IsChanging(MovementController.instance.GetDirection(), kvp.Value))
+                {
+                    MovementController.instance.SetDirection(kvp.Value);
+                    onMove?.Invoke(this, new OnMove { MoveDirection = kvp.Value });
+                    break;
+                }
+            }
+        }
     }
 
     public void OnMediumButtonClick()
@@ -33,38 +65,27 @@ public class InputController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    
+
+
+
+    private bool IsChanging(MoveDirection current, MoveDirection goal)
     {
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            if(MovementController.instance.GetDirection() != MoveDirection.DOWN)
-            {
-                MovementController.instance.SetDirection(MoveDirection.UP);
-            }
-        }
+        return (current != goal && current != goal.Opposite());
+    }
+}
 
-        if (Input.GetKeyDown(KeyCode.S))
+public static class Extensions
+{
+    public static MoveDirection Opposite(this MoveDirection direction)
+    {
+        switch (direction)
         {
-            if (MovementController.instance.GetDirection() != MoveDirection.UP)
-            {
-                MovementController.instance.SetDirection(MoveDirection.DOWN);
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            if (MovementController.instance.GetDirection() != MoveDirection.LEFT)
-            {
-                MovementController.instance.SetDirection(MoveDirection.RIGHT);
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            if (MovementController.instance.GetDirection() != MoveDirection.RIGHT)
-            {
-                MovementController.instance.SetDirection(MoveDirection.LEFT);
-            }
+            case MoveDirection.UP: return MoveDirection.DOWN;
+            case MoveDirection.DOWN: return MoveDirection.UP;
+            case MoveDirection.RIGHT: return MoveDirection.LEFT;
+            case MoveDirection.LEFT: return MoveDirection.RIGHT;
+            default: return MoveDirection.UP; // Default to prevent compiler error
         }
     }
 }

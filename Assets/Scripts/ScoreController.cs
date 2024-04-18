@@ -9,23 +9,23 @@ public class ScoreController : MonoBehaviour
 {
     private void Awake()
     {
-        MovementController.onGameOver += ScoreController_onGameOver;
-        MovementController.onApplePick += ScoreController_onApplePick;
+        MovementController.onGameOver += MovementController_onGameOver;
+        MovementController.onApplePick += MovementController_onApplePick;
     }
 
     private void OnDestroy()
     {
-        MovementController.onGameOver -= ScoreController_onGameOver;
-        MovementController.onApplePick -= ScoreController_onApplePick;
+        MovementController.onGameOver -= MovementController_onGameOver;
+        MovementController.onApplePick -= MovementController_onApplePick;
     }
 
 
-    private void ScoreController_onApplePick(object sender, OnApplePicked e)
+    private void MovementController_onApplePick(object sender, OnApplePick e)
     {
         Debug.Log("Apple picked");
         int currentScore = int.Parse(GetComponent<TextMeshProUGUI>().text);
 
-        float roundedSpeed = Mathf.Round(e.speed * 1000f) / 1000f;
+        float roundedSpeed = Mathf.Round(e.snakeSpeed * 1000f) / 1000f;
 
         switch (roundedSpeed)
         {
@@ -43,7 +43,7 @@ public class ScoreController : MonoBehaviour
         GetComponent<TextMeshProUGUI>().text = (currentScore).ToString();
     }
 
-    private void ScoreController_onGameOver(object sender, System.EventArgs e)
+    private void MovementController_onGameOver(object sender, System.EventArgs e)
     {
         ResetScore();
     }
