@@ -7,7 +7,7 @@ public class PanelController : MonoBehaviour
 
     public static PanelController instance;
     // Update is called once per frame
-    void Update()
+    void Awake()
     {
         instance = this;
     }

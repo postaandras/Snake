@@ -27,6 +27,11 @@ public class MovementController : MonoBehaviour
 
 
     public static event EventHandler onGameOver;
+    public static event EventHandler<OnApplePicked> onApplePick;
+    public class OnApplePicked : EventArgs
+    {
+        public float speed;
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -97,6 +102,7 @@ public class MovementController : MonoBehaviour
         if (currentBoard[target_x, target_y].IsApple())
         {
             Debug.Log("I eats");
+            onApplePick?.Invoke(this, new OnApplePicked { speed = this.snakeSpeed });
             CollectionController.instance.AppleSpawner(snaketiles);
         }
         else
