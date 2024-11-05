@@ -42,7 +42,7 @@ public class InputController : MonoBehaviour
         }
     }
 
-    public void OnMediumButtonClick()
+    public static void OnMediumButtonClick()
     {
         Debug.Log("Medium difficulty chosen");
         MovementController.instance.SetSnakeSpeed("medium");
